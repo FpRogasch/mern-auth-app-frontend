@@ -1,22 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import profileImg from "../../assets/avatarr.png";
 import "./Profile.scss";
 import Card from "../../components/card/Card";
 import PageMenu from "../../components/pageMenu/PageMenu";
-
-const initialState = {
-    name: "Felipe",
-    email: "fpoblete.andres@gmail.com",
-    phone: "",
-    bio: "",
-    photo: "",
-    role: "",
-    isVerified: false,
-}
+import useRedirectLoggedOutUser from "../../customHook/useRedirectLoggedOutUser";
+import { useDispatch, useSelector } from "react-redux";
+import { getUser } from "../../redux/features/auth/authSlice";
+import Loader from "../../components/loader/Loader";
 
 const Profile = () => {
 
+    useRedirectLoggedOutUser("/login");
+
+    const dispatch = useDispatch();
+
+    const { isLoading, isLoggedIn, isSuccess, message, user } = useSelector((state) => state.auth)
+
+    const initialState = {
+        name: user.name || "",
+        email: user.email || "",
+        phone: user.phone || "",
+        bio: user.bio || "",
+        photo: user.photo || "",
+        role: user.role || "",
+        isVerified: user.isVerified || false,
+    }
+
     const [profile, setProfile] = useState(initialState);
+
+    useEffect(() => {
+        dispatch(getUser())
+    }, [dispatch])
 
     const handleImageChange = () => {}
 
@@ -25,6 +39,7 @@ const Profile = () => {
     return <>
         <section>
             <div className="container">
+                {isLoading && <Loader />}
                 <PageMenu />
                 <h2>Profile</h2>
                 <div className="--flex-start profile">
@@ -32,8 +47,8 @@ const Profile = () => {
                         <>
                             <div className="profile-photo">
                                 <div>
-                                    <img src={profileImg} alt="Profile img" />
-                                    <h3>Role: Client</h3>
+                                    <img src={profile?.photo} alt="Profile img" />
+                                    <h3>Role: {profile.role}</h3>
                                 </div>
                             </div>
                             <form>
@@ -49,7 +64,7 @@ const Profile = () => {
                                     <label>Name:</label>
                                     <input type="text" 
                                         name="name" 
-                                        value={profile.name} 
+                                        value={profile?.name} 
                                         onChange={handleInputChange}
                                     />
                                 </p>
@@ -57,7 +72,7 @@ const Profile = () => {
                                     <label>Email:</label>
                                     <input type="email" 
                                         name="email" 
-                                        value={profile.email} 
+                                        value={profile?.email} 
                                         onChange={handleInputChange}
                                         disabled
                                     />
@@ -66,7 +81,7 @@ const Profile = () => {
                                     <label>Phone:</label>
                                     <input type="text" 
                                         name="phone" 
-                                        value={profile.phone} 
+                                        value={profile?.phone} 
                                         onChange={handleInputChange}
                                     />
                                 </p>
@@ -74,7 +89,7 @@ const Profile = () => {
                                     <label>Bio:</label>
                                     <textarea 
                                         name="bio" 
-                                        value={profile.bio} 
+                                        value={profile?.bio} 
                                         onChange={handleInputChange}
                                         cols="30"
                                         rows="10"

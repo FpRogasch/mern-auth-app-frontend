@@ -6,16 +6,26 @@ import { BiLogIn } from "react-icons/bi";
 import { FaUserCircle } from "react-icons/fa";
 
 import "./Header.scss";
+import { useDispatch } from 'react-redux';
+import { RESET, logout } from '../../redux/features/auth/authSlice';
+import { ShowOnLoggin, ShowOnLogout } from '../protect/hiddenLink';
 
 const activeLink = ({isActive}) => (isActive ? "active" : "")
 
 const Header = () => {
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const goHome = () => {
         navigate("/");
     };
+
+    const logoutUser = async () => {
+        dispatch(RESET());
+        await dispatch(logout());
+        navigate("/login");
+    }
 
     return (
         <header className='header'>
@@ -26,25 +36,31 @@ const Header = () => {
                 </div>
 
                 <ul className='home-links'>
-                    <li className='--flex-center'>
-                        <FaUserCircle size={20} />
-                        <p className='--color-white'>
-                            Hi, Felipe
-                        </p>
-                    </li>
-                    <li>
-                        <button className='--btn --btn-primary'>
-                            <Link to="/login">Login</Link>
-                        </button>
-                    </li>
-                    <li>
-                        <NavLink to="/profile" className={activeLink}>Profile</NavLink>
-                    </li>
-                    <li>
-                        <button className='--btn --btn-secondary'>
-                            Logout
-                        </button>
-                    </li>
+                    <ShowOnLoggin>
+                        <li className='--flex-center'>
+                            <FaUserCircle size={20} />
+                            <p className='--color-white'>
+                                Hi, Felipe |
+                            </p>
+                        </li>
+                    </ShowOnLoggin>
+                    <ShowOnLogout>
+                        <li>
+                            <button className='--btn --btn-primary'>
+                                <Link to="/login">Login</Link>
+                            </button>
+                        </li>
+                    </ShowOnLogout>
+                    <ShowOnLoggin>
+                        <li>
+                            <NavLink to="/profile" className={activeLink}>Profile</NavLink>
+                        </li>
+                        <li>
+                            <button onClick={logoutUser} className='--btn --btn-secondary'>
+                                Logout
+                            </button>
+                        </li>
+                    </ShowOnLoggin>
                 </ul>
             </nav>
         </header>
