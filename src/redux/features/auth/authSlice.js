@@ -72,7 +72,7 @@ export const getLoginStatus = createAsyncThunk(
     "auth/getLoginStatus",
     async ( _, thunkAPI ) => {
         try {
-            return await authService.loginStatus()
+            return await authService.getLoginStatus()
         } catch (error) {
             const message = (error.response && 
                             error.response.data && 
@@ -85,12 +85,30 @@ export const getLoginStatus = createAsyncThunk(
     }
 )
 
-// Get Login Status
+// Get User
 export const getUser = createAsyncThunk(
     "auth/getUser",
     async ( _, thunkAPI ) => {
         try {
             return await authService.getUser()
+        } catch (error) {
+            const message = (error.response && 
+                            error.response.data && 
+                            error.response.data.message) || 
+                            error.message || 
+                            error.toString()
+
+            return thunkAPI.rejectWithValue(message)
+        }
+    }
+)
+
+// Update User
+export const updateUser = createAsyncThunk(
+    "auth/updateUser",
+    async ( userData, thunkAPI ) => {
+        try {
+            return await authService.updateUser(userData)
         } catch (error) {
             const message = (error.response && 
                             error.response.data && 
@@ -186,7 +204,7 @@ const authSlice = createSlice({
                     state.isError = true;
                     state.message = action.payload;
                 })
-                // Get Login Status
+                // Get User
                 .addCase(getUser.pending, (state) => {
                     state.isLoading = true;
                 })
@@ -196,6 +214,23 @@ const authSlice = createSlice({
                     state.user = action.payload;
                 })
                 .addCase(getUser.rejected, (state, action) => {
+                    state.isLoading = false;
+                    state.isError = true;
+                    state.message = action.payload;
+                    toast.error(action.payload);
+                })
+                // Update User
+                .addCase(updateUser.pending, (state) => {
+                    state.isLoading = true;
+                })
+                .addCase(updateUser.fulfilled, (state, action) => {
+                    state.isLoading = false;
+                    state.isSuccess = true;
+                    state.isLoggedIn = true;
+                    state.user = action.payload;
+                    toast.success("User Uploaded");
+                })
+                .addCase(updateUser.rejected, (state, action) => {
                     state.isLoading = false;
                     state.isError = true;
                     state.message = action.payload;

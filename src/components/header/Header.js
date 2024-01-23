@@ -9,6 +9,7 @@ import "./Header.scss";
 import { useDispatch } from 'react-redux';
 import { RESET, logout } from '../../redux/features/auth/authSlice';
 import { ShowOnLoggin, ShowOnLogout } from '../protect/hiddenLink';
+import { UserName } from '../../pages/profile/Profile';
 
 const activeLink = ({isActive}) => (isActive ? "active" : "")
 
@@ -39,9 +40,7 @@ const Header = () => {
                     <ShowOnLoggin>
                         <li className='--flex-center'>
                             <FaUserCircle size={20} />
-                            <p className='--color-white'>
-                                Hi, Felipe |
-                            </p>
+                            <UserName />
                         </li>
                     </ShowOnLoggin>
                     <ShowOnLogout>
