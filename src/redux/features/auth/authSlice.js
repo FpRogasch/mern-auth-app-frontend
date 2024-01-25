@@ -121,6 +121,114 @@ export const updateUser = createAsyncThunk(
     }
 )
 
+// Send Verification Email
+export const sendVerificationEmail = createAsyncThunk(
+    "auth/sendVerificationEmail",
+    async ( userData, thunkAPI ) => {
+        try {
+            return await authService.sendVerificationEmail(userData)
+        } catch (error) {
+            const message = (error.response && 
+                            error.response.data && 
+                            error.response.data.message) || 
+                            error.message || 
+                            error.toString()
+
+            return thunkAPI.rejectWithValue(message)
+        }
+    }
+)
+
+// Verify User
+export const verifyUser = createAsyncThunk(
+    "auth/verifyUser",
+    async ( verificationToken, thunkAPI ) => {
+        try {
+            return await authService.verifyUser(verificationToken)
+        } catch (error) {
+            const message = (error.response && 
+                            error.response.data && 
+                            error.response.data.message) || 
+                            error.message || 
+                            error.toString()
+
+            return thunkAPI.rejectWithValue(message)
+        }
+    }
+)
+
+// Change Password
+export const changePassword = createAsyncThunk(
+    "auth/changePassword",
+    async ( userData, thunkAPI ) => {
+        try {
+            return await authService.changePassword(userData)
+        } catch (error) {
+            const message = (error.response && 
+                            error.response.data && 
+                            error.response.data.message) || 
+                            error.message || 
+                            error.toString()
+
+            return thunkAPI.rejectWithValue(message)
+        }
+    }
+)
+
+// Forgot Password
+export const forgotPassword = createAsyncThunk(
+    "auth/forgotPassword",
+    async ( userData, thunkAPI ) => {
+        try {
+            return await authService.forgotPassword(userData)
+        } catch (error) {
+            const message = (error.response && 
+                            error.response.data && 
+                            error.response.data.message) || 
+                            error.message || 
+                            error.toString()
+
+            return thunkAPI.rejectWithValue(message)
+        }
+    }
+)
+
+// Reset Password
+export const resetPassword = createAsyncThunk(
+    "auth/resetPassword",
+    async ( {userData, resetToken}, thunkAPI ) => {
+        try {
+            return await authService.resetPassword(userData, resetToken)
+        } catch (error) {
+            const message = (error.response && 
+                            error.response.data && 
+                            error.response.data.message) || 
+                            error.message || 
+                            error.toString()
+
+            return thunkAPI.rejectWithValue(message)
+        }
+    }
+)
+
+// Get Users
+export const getUsers = createAsyncThunk(
+    "auth/getUsers",
+    async ( _, thunkAPI ) => {
+        try {
+            return await authService.getUsers()
+        } catch (error) {
+            const message = (error.response && 
+                            error.response.data && 
+                            error.response.data.message) || 
+                            error.message || 
+                            error.toString()
+
+            return thunkAPI.rejectWithValue(message)
+        }
+    }
+)
+
 const authSlice = createSlice({
     name: "auth",
     initialState,
@@ -231,6 +339,101 @@ const authSlice = createSlice({
                     toast.success("User Uploaded");
                 })
                 .addCase(updateUser.rejected, (state, action) => {
+                    state.isLoading = false;
+                    state.isError = true;
+                    state.message = action.payload;
+                    toast.error(action.payload);
+                })
+                // Send Verification Email
+                .addCase(sendVerificationEmail.pending, (state) => {
+                    state.isLoading = true;
+                })
+                .addCase(sendVerificationEmail.fulfilled, (state, action) => {
+                    state.isLoading = false;
+                    state.isSuccess = true;
+                    state.message = action.payload;
+                    toast.success(action.payload);
+                })
+                .addCase(sendVerificationEmail.rejected, (state, action) => {
+                    state.isLoading = false;
+                    state.isError = true;
+                    state.message = action.payload;
+                    toast.error(action.payload);
+                })
+                // Verify User
+                .addCase(verifyUser.pending, (state) => {
+                    state.isLoading = true;
+                })
+                .addCase(verifyUser.fulfilled, (state, action) => {
+                    state.isLoading = false;
+                    state.isSuccess = true;
+                    state.message = action.payload;
+                    toast.success(action.payload);
+                })
+                .addCase(verifyUser.rejected, (state, action) => {
+                    state.isLoading = false;
+                    state.isError = true;
+                    state.message = action.payload;
+                    toast.error(action.payload);
+                })
+                // Change Password
+                .addCase(changePassword.pending, (state) => {
+                    state.isLoading = true;
+                })
+                .addCase(changePassword.fulfilled, (state, action) => {
+                    state.isLoading = false;
+                    state.isSuccess = true;
+                    state.message = action.payload;
+                    toast.success(action.payload);
+                })
+                .addCase(changePassword.rejected, (state, action) => {
+                    state.isLoading = false;
+                    state.isError = true;
+                    state.message = action.payload;
+                    toast.error(action.payload);
+                })
+                // Forgot Password
+                .addCase(forgotPassword.pending, (state) => {
+                    state.isLoading = true;
+                })
+                .addCase(forgotPassword.fulfilled, (state, action) => {
+                    state.isLoading = false;
+                    state.isSuccess = true;
+                    state.message = action.payload;
+                    toast.success(action.payload);
+                })
+                .addCase(forgotPassword.rejected, (state, action) => {
+                    state.isLoading = false;
+                    state.isError = true;
+                    state.message = action.payload;
+                    toast.error(action.payload);
+                })
+                // Reset Password
+                .addCase(resetPassword.pending, (state) => {
+                    state.isLoading = true;
+                })
+                .addCase(resetPassword.fulfilled, (state, action) => {
+                    state.isLoading = false;
+                    state.isSuccess = true;
+                    state.message = action.payload;
+                    toast.success(action.payload);
+                })
+                .addCase(resetPassword.rejected, (state, action) => {
+                    state.isLoading = false;
+                    state.isError = true;
+                    state.message = action.payload;
+                    toast.error(action.payload);
+                })
+                // Get Users
+                .addCase(getUsers.pending, (state) => {
+                    state.isLoading = true;
+                })
+                .addCase(getUsers.fulfilled, (state, action) => {
+                    state.isLoading = false;
+                    state.isSuccess = true;
+                    state.users = action.payload;
+                })
+                .addCase(getUsers.rejected, (state, action) => {
                     state.isLoading = false;
                     state.isError = true;
                     state.message = action.payload;

@@ -13,7 +13,7 @@ import Loader from "../../components/loader/Loader"
 
 // Redux features
 import { validateEmail } from "../../redux/features/auth/authService"
-import { RESET, register } from "../../redux/features/auth/authSlice"
+import { RESET, register, sendVerificationEmail } from "../../redux/features/auth/authSlice"
 
 import React, { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
@@ -109,7 +109,8 @@ const Register = () => {
         }
 
         // console.log(userData);
-        await dispatch(register(userData))
+        await dispatch(register(userData));
+        await dispatch(sendVerificationEmail());
     };
 
     useEffect(() => {
