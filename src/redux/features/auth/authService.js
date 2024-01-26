@@ -82,6 +82,30 @@ const getUsers = async () => {
     return response.data;
 };
 
+// Delete User
+const deleteUser = async (id) => {
+    const response = await axios.delete(API_URL + id);
+    return response.data.message;
+};
+
+// Upgrade User
+const upgradeUser = async (userData) => {
+    const response = await axios.post(API_URL + "upgradeUser", userData);
+    return response.data.message;
+};
+
+// Send Login Code
+const sendLoginCode = async (email) => {
+    const response = await axios.post(API_URL + `sendLoginCode/${email}`);
+    return response.data.message;
+};
+
+// Login With Code
+const loginWithCode = async (code, email) => {
+    const response = await axios.post(API_URL + `loginWithCode/${email}`, code);
+    return response.data;
+};
+
 const authService = {
     register,
     login,
@@ -94,7 +118,11 @@ const authService = {
     changePassword,
     forgotPassword,
     resetPassword,
-    getUsers
+    getUsers,
+    deleteUser,
+    upgradeUser,
+    sendLoginCode,
+    loginWithCode
 }
 
 export default authService;

@@ -14,7 +14,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { validateEmail } from "../../redux/features/auth/authService";
-import { RESET, login } from "../../redux/features/auth/authSlice";
+import { RESET, login, sendLoginCode } from "../../redux/features/auth/authSlice";
 
 const initialState = {
     email: "",
@@ -34,7 +34,7 @@ const Login = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const { isLoading, isLoggedIn, isSuccess, message } = useSelector((state) => state.auth)
+    const { isLoading, isLoggedIn, isSuccess, message, isError, twoFactor } = useSelector((state) => state.auth);
 
     const loginUser = async (e) => {
         
@@ -61,8 +61,13 @@ const Login = () => {
             navigate("/profile")
         }
 
+        if (isError && twoFactor) {
+            dispatch(sendLoginCode(email))
+            navigate(`/loginWithCode/${email}`)
+        }
+
         dispatch(RESET())
-    }, [isLoggedIn, isSuccess, dispatch, navigate]);
+    }, [isLoggedIn, isSuccess, dispatch, navigate, isError, twoFactor, email]);
 
     return <div className={`container ${styles.auth}`}>
         {isLoading && <Loader />}

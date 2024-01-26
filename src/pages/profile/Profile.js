@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import profileImg from "../../assets/avatarr.png";
+// import profileImg from "../../assets/avatarr.png";
 import "./Profile.scss";
 import Card from "../../components/card/Card";
 import PageMenu from "../../components/pageMenu/PageMenu";
@@ -13,7 +13,7 @@ import Notification from "../../components/notification/Notification";
 const cloud_name = process.env.REACT_APP_CLOUD_NAME;
 const upload_preset = process.env.REACT_APP_UPLOAD_PRESET;
 
-const shortenText = (text, n) =>{
+export const shortenText = (text, n) =>{
     if (text.length > n) {
         const shortenText = text.substring(0, n).concat("...");
         return shortenText;
