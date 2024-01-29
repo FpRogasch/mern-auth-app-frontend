@@ -14,7 +14,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { validateEmail } from "../../redux/features/auth/authService";
-import { RESET, login, sendLoginCode } from "../../redux/features/auth/authSlice";
+import { RESET, login, loginWithGoogle, sendLoginCode } from "../../redux/features/auth/authSlice";
+
+import { GoogleLogin } from "@react-oauth/google";
 
 const initialState = {
     email: "",
@@ -69,6 +71,13 @@ const Login = () => {
         dispatch(RESET())
     }, [isLoggedIn, isSuccess, dispatch, navigate, isError, twoFactor, email]);
 
+    const googleLogin = async (credentialResponse) => {
+        console.log(credentialResponse)
+        await dispatch(
+            loginWithGoogle({userToken: credentialResponse.credential})
+        )
+    };
+
     return <div className={`container ${styles.auth}`}>
         {isLoading && <Loader />}
         <Card>
@@ -78,9 +87,16 @@ const Login = () => {
                 </div>
                 <h2>Login</h2>
                 <div className="--flex-center">
-                    <button className="--btn --btn-google">
+                    {/* <button className="--btn --btn-google">
                         Login with Google
-                    </button>
+                    </button> */}
+                    <GoogleLogin 
+                        onSuccess={googleLogin}
+                        onError={() => {
+                            console.log("Login Failed");
+                            toast.error("Login Failed");
+                        }}
+                    />
                 </div>
                 <br />
                 <p className="--text-center --fw-bold">or</p>

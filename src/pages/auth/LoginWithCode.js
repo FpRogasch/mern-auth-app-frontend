@@ -11,7 +11,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { RESET, loginWithCode } from "../../redux/features/auth/authSlice";
+import { RESET, loginWithCode, sendLoginCode } from "../../redux/features/auth/authSlice";
 import Loader from "../../components/loader/Loader";
 
 const LoginWithCode = () => {
@@ -23,6 +23,11 @@ const LoginWithCode = () => {
 
     const { isLoading, isLoggedIn, isSuccess } = useSelector((state) => state.auth);
 
+    const sendUserLoginCode = async () => {
+        await dispatch(sendLoginCode(email))
+        await dispatch(RESET())
+    }
+    
     const loginUserWithCode = async (e) => {
         e.preventDefault();
 
@@ -75,7 +80,7 @@ const LoginWithCode = () => {
                     <p>
                         <Link to="/">- Home</Link>
                     </p>
-                    <p className="v-link --color-primary">
+                    <p onClick={sendUserLoginCode} className="v-link --color-primary">
                         <b>Resend Code</b>
                     </p>
                 </div>
