@@ -33,7 +33,7 @@ const Header = () => {
             <nav>
                 <div className='logo' onClick={goHome}>
                     <BiLogIn size={35} />
-                    <span>AUTH:Z</span>
+                    <span>AUTH:XP</span>
                 </div>
 
                 <ul className='home-links'>
